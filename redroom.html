@@ -32,6 +32,7 @@
             left: 0;
             width: 100%;
             height: 100%;
+            display: none; /* Initially hidden */
         }
         #welcomeScreen {
             color: red;
@@ -95,6 +96,7 @@
             color: red;
             font-size: 20px;
             font-family: monospace;
+            display: none;
         }
         .slider-container {
             display: flex;
@@ -176,6 +178,7 @@
             color: lime;
             font-size: 20px;
             font-family: monospace;
+            display: none;
         }
     </style>
 </head>
@@ -282,8 +285,8 @@
             canvas.style.display = 'none';
             hurtButton.style.display = 'none';
             endButton.style.display = 'none';
-            timerDisplay.textContent = "00:00:00";
-            multiplierDisplay.textContent = "Multiplier: 1x"
+            timerDisplay.style.display = 'none';
+            multiplierDisplay.style.display = 'none';
             clearInterval(timerInterval);
         });
         closeScoresButton.addEventListener('click', function() {
@@ -367,6 +370,8 @@
                 hurtButton.textContent = friendImage ? "HURT THEM" : "HURT MYSELF";
                 endButton.textContent = friendImage ? "KILL THEM" : "SUICIDE";
                 canvas.style.display = 'block';
+                timerDisplay.style.display = 'block';
+                multiplierDisplay.style.display = 'block';
                 function draw() {
                     if (!running) return;
                     let screenOffsetX = 0, screenOffsetY = 0;
@@ -478,4 +483,16 @@
             scores.push({ name, time: finalTime, clicks: clickCount * multiplier });
             scores.sort((a, b) => a.time - b.time);
             localStorage.setItem('redRoomScores', JSON.stringify(scores));
-            displayScor
+            displayScores();
+        }
+        function displayScores() {
+            scoreListDiv.innerHTML = '';
+            scores.forEach(score => {
+                const scoreItem = document.createElement('p');
+                scoreItem.textContent = `${score.name}: Time: ${formatTime(score.time)}, Clicks: ${score.clicks}`;
+                scoreListDiv.appendChild(scoreItem);
+            });
+        }
+    </script>
+</body>
+</html>
